@@ -19,7 +19,7 @@ final class ViewClearCommand extends Command
     private const string ERR_CLEAR_FAILED = 'Failed to clear view cache: %s';
 
     public function __construct(
-        private readonly string $cacheDir,
+        private readonly ?string $cacheDir,
         private readonly Filesystem $filesystem,
     ) {
         parent::__construct();
@@ -37,7 +37,7 @@ final class ViewClearCommand extends Command
         $io->title(self::MSG_STARTING);
 
         try {
-            if ($this->filesystem->exists($this->cacheDir)) {
+            if (!empty($this->cacheDir) && $this->filesystem->exists($this->cacheDir)) {
                 $this->filesystem->remove($this->cacheDir);
             }
 

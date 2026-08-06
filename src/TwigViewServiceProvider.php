@@ -25,7 +25,7 @@ final class TwigViewServiceProvider extends AbstractServiceProvider
 
     public function __construct(
         private readonly string $viewsPath,
-        private readonly string $cacheDir = '',
+        private readonly ?string $cacheDir = null,
         private readonly bool $debug = false,
         private readonly string $defaultExtension = self::DEFAULT_EXTENSION,
     ) {}
@@ -59,7 +59,7 @@ final class TwigViewServiceProvider extends AbstractServiceProvider
 
             $loader = new FilesystemLoader($this->viewsPath);
             $twig = new Environment($loader, [
-                'cache' => $this->debug ? false : $this->cacheDir,
+                'cache' => $this->twigCache(),
                 'debug' => $this->debug,
             ]);
 
@@ -75,6 +75,18 @@ final class TwigViewServiceProvider extends AbstractServiceProvider
                 EventDispatcherResolver::optional($container),
             );
         })->setShared(true);
+    }
+
+    /**
+     * Null or empty cacheDir (or debug) → no filesystem cache.
+     */
+    private function twigCache(): string|false
+    {
+        if ($this->debug || empty($this->cacheDir)) {
+            return false;
+        }
+
+        return $this->cacheDir;
     }
 
     /**
