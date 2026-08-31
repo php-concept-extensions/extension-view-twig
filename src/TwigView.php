@@ -37,6 +37,24 @@ final class TwigView implements ViewInterface
         return $content;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function renderString(string $template, array $data = []): string
+    {
+        $startedAt = microtime(true);
+        $content = $this->twig->createTemplate($template)->render($data);
+        $this->dispatcher?->dispatch(new TemplateRendered(
+            view: '@string',
+            startedAt: $startedAt,
+            duration: microtime(true) - $startedAt,
+        ));
+
+        return $content;
+    }
+
     private function ensureExtension(string $viewName): string
     {
         if (str_ends_with($viewName, $this->defaultExtension)) {
