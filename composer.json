@@ -1,6 +1,6 @@
 {
     "name": "php-concept/extension-view-twig",
-    "description": "Concept View Twig engine — TwigView implementation",
+    "description": "Concept View Twig engine \u2014 TwigView implementation",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -17,5 +17,16 @@
         "symfony/console": "^7.2|^8.0",
         "symfony/filesystem": "^7.2|^8.0",
         "league/container": "^5.1"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
     }
 }
